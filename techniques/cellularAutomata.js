@@ -67,6 +67,10 @@ export default class cellularAutomata {
     }
 
     update() {
+        this.sk.noStroke();
+        let col = this.sk.color(this.sk.random(this.palette));
+        col.setAlpha(this.sk.random(10,80));
+
         for (let i = 0; i < this.cells.length; i++) {
             let x = i * this.w;
             let y = this.generation * this.w;
@@ -74,6 +78,7 @@ export default class cellularAutomata {
             let drawRect = false;
             if (this.cells[i] == 1) drawRect = true;
 
+            this.sk.fill(col);
             if (drawRect)
                 this.sk.rect(x, y, this.w, this.h);
         }
