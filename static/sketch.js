@@ -1,6 +1,7 @@
 const s = (sk) => {
     const DIM = 1000;
     let paused = false;
+    let status = "running";
 
     let activeTechnique, activeTechniqueObj;
     const changeOver = 250;
@@ -14,11 +15,20 @@ const s = (sk) => {
     };
 
     sk.setup = () => {
+        socket = io.connect("http://localhost:8081");
         sk.createCanvas(DIM, DIM).parent('canvasHolder');
         sk.background(20);
         sk.frameRate(60);
 
         loadNewScript(technique);
+
+        // socket.on('status', (data) => {
+        //     console.log("status requested");
+        //     const _data = {
+        //         status: status,
+        //     };
+        //     socket.emit("client_status", _data);
+        // });
     };
 
     sk.draw = () => {
@@ -31,9 +41,14 @@ const s = (sk) => {
             }
 
             if ((sk.frameCount % changeOver) == 0) {
-                console.log("Re-initializing.")
-                if (registry[technique] != null)
-                    activeTechniqueObj = loadNewObject(technique);
+                status = "done";
+                console.log("Done");
+                // socket.emit('disconnect');
+                sk.noLoop();
+                socket.emit("done", null);
+                // console.log("Re-initializing.")
+                // if (registry[technique] != null)
+                //     activeTechniqueObj = loadNewObject(technique);
             }
         }
     };

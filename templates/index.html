@@ -1,0 +1,31 @@
+{% extends "bootstrap/base.html" %}
+{% block title %} HWVisualizer Testing Environment {% endblock title %}
+
+{% block head %}
+{{ super() }}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.min.js"></script>
+
+<script>
+  let socket = io();
+  socket.on('connect', function () {
+    socket.emit('connected', { data: "New user connected" });
+
+    socket.on('disconnect', function() {
+      console.log('Client disconnected.');
+    });
+  });
+
+</script>
+
+<script src={{ url_for('send_static', path='sketch.js' ) }}></script>
+{% endblock head %}
+
+{% block content %}
+<div class="container">
+  <!-- div element that will hold the canvas -->
+  <div id="canvasHolder" align="center">
+  </div>
+</div>
+{% endblock content %}
